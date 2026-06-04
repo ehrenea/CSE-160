@@ -5,6 +5,8 @@ import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
 function main() {
+  console.log('canvas:', document.querySelector('#c'));
+  console.log('all canvases:', document.querySelectorAll('canvas'));
 	const canvas = document.querySelector( '#c' );
 	const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -165,7 +167,20 @@ function main() {
       const sphereMat = new THREE.MeshPhongMaterial();
       sphereMat.color.setHSL(i * .73, 1, 0.5);
       const mesh = new THREE.Mesh(sphereGeo, sphereMat);
-      mesh.position.set(-sphereRadius - 1, sphereRadius + 2, i * sphereRadius * -2.2);
+      mesh.position.set(-sphereRadius - 5, sphereRadius + 2, i * sphereRadius * -2.2);
+      scene.add(mesh);
+    }
+  }
+
+  {
+    const cylRadius = 3;
+    const cylGeo = new THREE.CylinderGeometry(cylRadius, cylRadius, 6, 32); // (topR, bottomR, height, segments)
+    const numCyl = 20;
+    for (let i = 0; i < numCyl; ++i) {
+      const cylMat = new THREE.MeshPhongMaterial(); // ← consistent name
+      cylMat.color.setHSL(i * .73, 1, 0.5);
+      const mesh = new THREE.Mesh(cylGeo, cylMat);
+      mesh.position.set(cylRadius + 10, cylRadius + 2, i * cylRadius * -2.2); // ← moved to right side
       scene.add(mesh);
     }
   }
@@ -207,8 +222,8 @@ function main() {
   }
 
   {
-    const loader = new THREE.CubeTextureLoader();
-    const texture = loader.load([
+    const cubeLoader = new THREE.CubeTextureLoader();
+    const texture = cubeLoader.load([
       'resources/images/sky.jpg',
       'resources/images/sky.jpg',
       'resources/images/sky.jpg',
